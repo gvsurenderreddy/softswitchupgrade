@@ -523,7 +523,7 @@ process_coding_queues(struct pending_flows *pl)
 	}
     }
 }
-
+//need unified encoder/decoder
 static int
 process_encoding_queues(struct pending_flows *pl)
 {
@@ -648,28 +648,29 @@ dp_exp_bme_process_pending(struct datapath *dp)
 }
 
 /* 
-#+begin_ditaa
+#+begin_data
          +---------------+--------------+--------------+------+
-   pkt : |MPLS mpls-label|MPLS seq.no 1 |MPLS seq.no 2 | data |
+   pkt : |IP |Reverse Multicast -- TREE ID| SRC ID| DEST ID | Sequence No.| Message Type| |data |
          +---------------+--------------+--------------+------+
-#+end_ditaa
+#+end_data
 */
 static void
-xor_packet_from_queue(struct packet *pkt0, 
-		      struct ofl_bme_xor_packet *action,
-		      uint32_t type)
+xor_packet_from_queue(struct packet *pkt0, struct ofl_bme_xor_packet *action,uint32_t type)
 {
-    struct ofl_bme_xor_packet *bme_act = 
-	(struct ofl_bme_xor_packet *)action;
+    struct ofl_bme_xor_packet *bme_act = 	(struct ofl_bme_xor_packet *)action;
+  
     uint32_t flow_label, flow_ttl, seq_10, seq_01;
-    uint32_t mpls_field;
+    //uint32_t mpls_field;
+    uint32_t rm_fields;
+    uint32_t ip_fields;
+
     struct pending_pkt *pending;
     struct pending_flows *pl;
     struct packet *pkt;
     /* We cannot write pkt = packet_clone(pkt0); as it clones the
      * current action_set and metadata too. */
-    pkt = packet_create(pkt0->dp, pkt0->in_port, ofpbuf_clone(pkt0->buffer),
-			pkt0->packet_out);
+  
+    pkt = packet_create(pkt0->dp, pkt0->in_port, ofpbuf_clone(pkt0->buffer),pkt0->packet_out);
 
     /* process flow-label */
     packet_handle_std_validate(pkt->handle_std);
