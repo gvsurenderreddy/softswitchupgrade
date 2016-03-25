@@ -1,4 +1,4 @@
-
+//change required
 #include <netinet/in.h>
 #include "packet.h"
 #include "openflow/openflow.h"
@@ -14,7 +14,7 @@
 #define LOG_MODULE VLM_dp_exp_bme
 static struct vlog_rate_limit rl = VLOG_RATE_LIMIT_INIT(60, 60);
 
-#define XOR_ENCODING_WAIT 20000 /* max. time in ms to wait for packets
+#define XOR_ENCODING_WAIT 2 /* max. time in ms to wait for packets
 			        * of the other flow before seding out a
 			        * packet alone */
 #define PENDING_MAX_LENGTH 10000  /* max. number of packets in pending lists */
