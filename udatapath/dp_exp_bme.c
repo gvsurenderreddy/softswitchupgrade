@@ -100,7 +100,7 @@ XOR(char *dst, char *src, int len)
 	len --;
     }
 }
-
+/*
 static inline uint32_t
 increment_mpls_label(uint32_t seq_no)
 {
@@ -112,14 +112,14 @@ increment_mpls_label(uint32_t seq_no)
 	return seq_no;
     }
 }
-
-/* compare sequence numbers stored in 20 bit-long mpls labels
+*/
+/* compare sequence numbers stored in 32 bit-long Reverse Multicast Sequence Numbers
  * taking int account overflow, i.e., 1 follows MAX_MPLS_LABEL */
 static inline int
-cmp_mpls_seq_numbers(uint32_t a, uint32_t b)
+cmp_RM_seq_numbers(uint32_t a, uint32_t b)
 {
-    static const uint32_t lower_limit = ((1 << 18) - 1);
-    static const uint32_t upper_limit = (3 << 18);
+    static const uint32_t lower_limit = ((1 << 30) - 1);
+    static const uint32_t upper_limit = (3 << 30);
 
     if (a == b)
 	return 0;
@@ -132,12 +132,12 @@ cmp_mpls_seq_numbers(uint32_t a, uint32_t b)
 }
 
 static inline void
-set_mpls_label(struct packet *pkt, uint32_t label)
+set_RM_SRC_label(struct packet *pkt, uint32_t label)
 {
     struct ofl_action_mpls_label label_action;
 
-    label_action.header.type = OFPAT_SET_MPLS_LABEL;
-    label_action.mpls_label = label;
+    label_action.header.type = OFPAT_SET_RM_SRC_LABEL;
+    label_action.rm_src_label = label;
     dp_execute_action(pkt, (struct ofl_action_header*) &label_action);
 }
 
@@ -146,13 +146,13 @@ add_mpls_label(struct packet *pkt, uint32_t label)
 {
     struct ofl_action_push push_action;
 
-    push_action.header.type = OFPAT_PUSH_MPLS;
-    push_action.ethertype = ETH_TYPE_MPLS;
+    push_action.header.type = OFPAT_PUSH_RM;
+    push_action.ethertype = ETH_TYPE_RM;
     dp_execute_action(pkt, (struct ofl_action_header*) &push_action);
 
     set_mpls_label(pkt, label);
 }
-
+/*
 static void
 set_mpls_ttl(struct packet *pkt, uint32_t ttl)
 {
@@ -162,19 +162,20 @@ set_mpls_ttl(struct packet *pkt, uint32_t ttl)
     ttl_action.mpls_ttl = (uint8_t)ttl;
     dp_execute_action(pkt, (struct ofl_action_header*) &ttl_action);
 }
-
+*/
+/*
 static inline void
 pop_mpls_header(struct packet *pkt, uint16_t ethertype)
 {
     struct ofl_action_pop_mpls pop_action;
 
-    pop_action.header.type = OFPAT_POP_MPLS;
+    pop_action.header.type = OFPAT_POP_RM;
     pop_action.ethertype = ethertype;
     dp_execute_action(pkt, (struct ofl_action_header*) &pop_action);
 }
-
-/* ================================================================ */
 
+/* ================================================================ */
+*/
 static void
 output_by_metadata(struct packet *pkt)
 {
