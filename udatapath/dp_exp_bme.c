@@ -674,32 +674,38 @@ xor_packet_from_queue(struct packet *pkt0, struct ofl_bme_xor_packet *action,uin
 
     /* process flow-label */
     packet_handle_std_validate(pkt->handle_std);
-    mpls_field = ntohl(pkt->handle_std->proto->mpls->fields);
-    flow_label = (mpls_field & MPLS_LABEL_MASK) >> MPLS_LABEL_SHIFT;
-    flow_ttl   = (mpls_field & MPLS_TTL_MASK) >> MPLS_TTL_SHIFT;
+    //mpls_field = ntohl(pkt->handle_std->proto->mpls->fields);
+    rm_fields = ntohl(pkt->handle_std->proto->rm->fields);
+    //flow_label = (mpls_field & MPLS_LABEL_MASK) >> MPLS_LABEL_SHIFT;
+    //flow_ttl   = (mpls_field & MPLS_TTL_MASK) >> MPLS_TTL_SHIFT;
+     flow_label = (rm_fields & RM_LABEL_MASK) >> RM_LABEL_SHIFT;
+    //flow_ttl   = (rm_fields & RM_TTL_MASK) >> RM_TTL_SHIFT;
     VLOG_DBG_RL(LOG_MODULE, &rl, "flow_label=\"0x%08"PRIx32"\"", flow_label);
     
-    pop_mpls_header(pkt, ETH_TYPE_MPLS);
-    packet_handle_std_validate(pkt->handle_std);
+    //pop_mpls_header(pkt, ETH_TYPE_MPLS);
+    //packet_handle_std_validate(pkt->handle_std);
 
     /* process seq_10 */
+    /*
     mpls_field = ntohl(pkt->handle_std->proto->mpls->fields);
     seq_10 = (mpls_field & MPLS_LABEL_MASK) >> MPLS_LABEL_SHIFT;
     VLOG_DBG_RL(LOG_MODULE, &rl, "seq_10    =\"0x%08"PRIx32"\"", seq_10);
 
     pop_mpls_header(pkt, ETH_TYPE_MPLS);
     packet_handle_std_validate(pkt->handle_std);
-
+    */
     /* process seq_01 */
+    /*
     mpls_field = ntohl(pkt->handle_std->proto->mpls->fields);
     seq_01 = (mpls_field & MPLS_LABEL_MASK) >> MPLS_LABEL_SHIFT;
     VLOG_DBG_RL(LOG_MODULE, &rl, "seq_01    =\"0x%08"PRIx32"\"", seq_01);
   
     pop_mpls_header(pkt, ETH_TYPE_IP);
     packet_handle_std_validate(pkt->handle_std);
-
+*/
     /* enqueue pkt */
-    if (type == BME_XOR_ENCODE) {
+    //=============================================================XOR_CODE===========================================================
+    if (type == XOR_CODE) {
 	if ((seq_10 == 0 && seq_01 == 0) ||
 	    (seq_10 != 0 && seq_01 != 0))
 	{
