@@ -26,9 +26,9 @@ static struct vlog_rate_limit rl = VLOG_RATE_LIMIT_INIT(60, 60);
 struct pending_pkt {
     struct list node;
     struct packet *pkt;
-    uint32_t seq_no_01;
-    uint32_t seq_no_10;
-    uint32_t mpls_ttl;
+    uint32_t seq_no;
+    uint32_t tree_id;
+    uint32_t dest_id;
     uint32_t label_a, label_b;
     long long int deadline;  /* in ms */
 };
@@ -38,10 +38,10 @@ struct pending_flows {
 
     struct list enc_10;
     struct list enc_01;
-    struct list dec_old;
+    //struct list dec_old;
     struct list seq; /* list for the serializer */
     int length;  /* overall length of the lists above */
-    struct list dec_new;
+    //struct list dec_new;
 
     uint32_t last_seq;
 };
