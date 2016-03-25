@@ -304,13 +304,14 @@ set_field_from_metadata(struct packet *pkt,
 	(act->field & OFPFMF_DL_TYPE)  // Ethernet frame type.
 	(act->field & OFPFMF_NW_TOS)   // IP ToS (DSCP field, 6 bits).
 	(act->field & OFPFMF_NW_PROTO) // IP protocol.
+	
 	(act->field & OFPFMF_TP_SRC)   // TCP/UDP/SCTP source port.
 	(act->field & OFPFMF_TP_DST)   // TCP/UDP/SCTP destination port.
     */
-
-    if (act->field & OFPFMF_MPLS_LABEL) { /* MPLS label. */
+    
+    if (act->field & OFPFMF_RM_SRC) { /* RM SRC ID label. */
 	uint32_t label = (uint32_t)(metadata >> offset);
-	set_mpls_label(pkt, label);
+	set_RM_SRC_label(pkt, label);
 	return;
     }
     /*
