@@ -29,7 +29,7 @@ struct pending_pkt {
     uint32_t seq_no;
     uint32_t tree_id;
     uint32_t dest_id;
-    uint32_t label_a, label_b;
+    uint32_t src_id;
     long long int deadline;  /* in ms */
 };
 struct pending_flows {
@@ -241,6 +241,7 @@ set_metadata_from_packet(struct packet *pkt,
 	value = match->tp_dst;
 	mask = m16;
     }
+    //need to change MPLS constants
     if (act->field & OFPFMF_MPLS_LABEL) { /* MPLS label. */
 	value = match->mpls_label;
 	mask = m32;  /* m20 maybe? */
@@ -327,7 +328,7 @@ set_field_from_metadata(struct packet *pkt,
 		"BME_set_field_from_metadata: field (0x%08"PRIx32
 		") is not yet supported", act->field);
 }
-
+/*
 static void
 set_mpls_label_from_counter(struct packet *pkt, 
 			    struct ofl_bme_set_mpls_label *act UNUSED)
@@ -338,7 +339,8 @@ set_mpls_label_from_counter(struct packet *pkt,
 
     counter = increment_mpls_label(counter);
 }
-
+*/
+/*
 static void
 set_metadata_from_counter(struct packet *pkt, 
 			  struct ofl_bme_set_metadata_from_counter *act)
@@ -360,7 +362,7 @@ set_metadata_from_counter(struct packet *pkt,
 	counter = 1;
     }
 }
-
+*/
 static struct packet*
 remove_from_pending(struct pending_flows *pl, struct pending_pkt* elem)
 {
@@ -373,7 +375,7 @@ remove_from_pending(struct pending_flows *pl, struct pending_pkt* elem)
 
     return pkt;
 }
-
+//need to update this
 /* pkt_1 <- pkt_1 XOR pkt_2.  Returns the updated pkt_1, destroys pkt_2. */
 static struct packet *
 xor_packets(struct packet *pkt_1, struct packet *pkt_2)
@@ -400,7 +402,7 @@ find_pkt_in_dec_old(struct pending_flows *pl, struct pending_pkt* p_new)
     struct pending_pkt *p_old, *pn;
 
     LIST_FOR_EACH_SAFE (p_old, pn, struct pending_pkt, node, &pl->dec_old) {
-	uint32_t n01 = p_new->seq_no_01;
+	uint32_t n01 = p_new->src_id;
 	uint32_t n10 = p_new->seq_no_10;
 	uint32_t o01 = p_old->seq_no_01;
 	uint32_t o10 = p_old->seq_no_10;
