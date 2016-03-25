@@ -242,6 +242,14 @@ set_metadata_from_packet(struct packet *pkt,
 	mask = m16;
     }
     //need to change MPLS constants
+    //
+    
+    if (act->field & OFPFMF_MPLS_LABEL) { /* MPLS label. */
+	value = match->mpls_label;
+	mask = m32;  /* m20 maybe? */
+    }
+    
+    
     if (act->field & OFPFMF_MPLS_LABEL) { /* MPLS label. */
 	value = match->mpls_label;
 	mask = m32;  /* m20 maybe? */
@@ -402,21 +410,29 @@ find_pkt_in_dec_old(struct pending_flows *pl, struct pending_pkt* p_new)
     struct pending_pkt *p_old, *pn;
 
     LIST_FOR_EACH_SAFE (p_old, pn, struct pending_pkt, node, &pl->dec_old) {
-	uint32_t n01 = p_new->src_id;
+	/*
+	uint32_t n01 = p_new->seq_no_01;
 	uint32_t n10 = p_new->seq_no_10;
 	uint32_t o01 = p_old->seq_no_01;
 	uint32_t o10 = p_old->seq_no_10;
+	*/
+	uint32_t new_seq_no = p_new->seq_no;
+	uint32_t old_seq_no = p_old->seq_no;
 	
-	if ((n01 == 0 || o01 == 0 || o01 == n01) &&
-	    (n10 == 0 || o10 == 0 || o10 == n10) &&
-	    ((n01 && n10) || ((o01 && o10))))
+	
+	/*
+	if ((n01 == 0 || o01 == 0 || o01 == n01) && (n10 == 0 || o10 == 0 || o10 == n10) && ((n01 && n10) || ((o01 && o10))))
 	{
 	    return p_old;
 	}
     }
+    */
+    if((new_seq_no == old_seq_no)) {
+        return p_old;
+    }
     return NULL;
 }
-
+/*
 static void
 process_decoding_queues(struct pending_flows *pl)
 {
@@ -445,6 +461,57 @@ process_decoding_queues(struct pending_flows *pl)
 	    free(p_old);
 
 	    pipeline_process_packet(pkt_new->dp->pipeline, pkt_new);
+	} else {
+	    list_push_back(&pl->dec_old, (struct list*)p_new);
+	    if (++(pl->length) > PENDING_MAX_LENGTH) {
+		p_old = (struct pending_pkt*)LIST_POP_FRONT(&pl->dec_old);
+		packet_destroy(p_old->pkt);
+		free(p_old);
+		pl->length --;
+	    }
+	}
+    }
+}
+*/
+static void
+process_coding_queues(struct pending_flows *pl)
+{
+    struct pending_pkt *p_new, *p_old;
+    struct packet *pkt_old, *pkt_new;
+    uint32_t seq_no_01, seq_no_10, src_id, dest_id;
+
+    while (!LIST_IS_EMPTY(&pl->dec_new)) {
+	p_new = (struct pending_pkt*)LIST_POP_FRONT(&pl->dec_new);
+	p_old = find_pkt_in_dec_old(pl, p_new);
+	if (p_old) {
+	    remove_from_pending(pl, p_old);
+	    //dont use full packet, simply use data
+	    pkt_new = p_new->pkt;
+	    pkt_old = p_old->pkt;
+	    data_new = p_new->data;
+	    data_old = p_old->data;
+	    data_new = xor_packets(data_new, data_old);
+        //
+
+        //add new ip layer
+        //pushing skeleton code for the time
+        //create function to add data part
+        pkt_coded->pkt = data_insert(pkt_new->pkt, data_new);
+
+        /*
+	    seq_no_01 = p_old->seq_no_01 ^ p_new->seq_no_01;
+	    seq_no_10 = p_old->seq_no_10 ^ p_new->seq_no_10;
+	    flow_label = seq_no_10? p_old->label_a: p_old->label_b;
+	    add_mpls_label(pkt_new, seq_no_01);
+	    add_mpls_label(pkt_new, seq_no_10);
+	    add_mpls_label(pkt_new, flow_label);
+	    set_mpls_ttl(pkt_new, p_new->mpls_ttl);
+        */
+        
+	    free(p_new);
+	    free(p_old);
+        //push new paket with coded data; dont care about source IP address
+	    pipeline_process_packet(pkt_coded->dp->pipeline, pkt_coded);
 	} else {
 	    list_push_back(&pl->dec_old, (struct list*)p_new);
 	    if (++(pl->length) > PENDING_MAX_LENGTH) {
