@@ -381,7 +381,7 @@ enum ofp_action_type {
     OFPAT_SET_MPLS_TC,      /* MPLS TC */
     OFPAT_SET_MPLS_TTL,     /* MPLS TTL */
     OFPAT_DEC_MPLS_TTL,     /* Decrement MPLS TTL */
-
+    
     OFPAT_PUSH_VLAN,        /* Push a new VLAN tag */
     OFPAT_POP_VLAN,         /* Pop the outer VLAN tag */
     OFPAT_PUSH_MPLS,        /* Push a new MPLS tag */
@@ -390,6 +390,12 @@ enum ofp_action_type {
     OFPAT_GROUP,            /* Apply group. */
     OFPAT_SET_NW_TTL,       /* IP TTL. */
     OFPAT_DEC_NW_TTL,       /* Decrement IP TTL. */
+    
+    OFPAT_SET_RM_TREE,      /* set the reverse multicast tree ID */
+    OFPAT_SET_RM_SRC,       /* set the reverse multicast source ID */
+    OFPAT_SET_RM_DEST,      /* set the reverse multicast destination ID */
+    OFPAT_SET_RM_DATA_TYPE,      /* set the reverse multicast reverse multicast data type */
+    
     OFPAT_EXPERIMENTER = 0xffff
 };
 
@@ -596,9 +602,11 @@ enum ofp_flow_wildcards {
     OFPFW_TP_DST      = 1 << 7,  /* TCP/UDP/SCTP destination port. */
     OFPFW_MPLS_LABEL  = 1 << 8,  /* MPLS label. */
     OFPFW_MPLS_TC     = 1 << 9,  /* MPLS TC. */
-
+    OFPFW_RM_TREE     = 1 << 10, /* RM TREE ID*/
+    OFPFW_RM_SRC      = 1 << 11, /* RM SRC ID*/
+    OFPFW_RM_DEST     = 1 << 12, /* RM DEST ID*/
     /* Wildcard all fields. */
-    OFPFW_ALL           = ((1 << 10) - 1)
+    OFPFW_ALL           = ((1 << 13) - 1) //updated to reflect RM
 };
 
 /* The wildcards for ICMP type and code fields use the transport source
@@ -669,6 +677,11 @@ struct ofp_match {
     uint16_t tp_dst;           /* TCP/UDP/SCTP destination port. */
     uint32_t mpls_label;       /* MPLS label. */
     uint8_t mpls_tc;           /* MPLS TC. */
+    //added RM features
+    uint16_t tree_id;          /* RM tree ID */
+    uint16_t src_id;           /* RM source ID */
+    uint16_t dest_id;          /* RM dest ID */
+    uint8_t data_type          /*RM data_type ID*/
     uint8_t pad2[3];           /* Align to 64-bits */
     uint64_t metadata;         /* Metadata passed between tables. */
     uint64_t metadata_mask;    /* Mask for metadata. */
@@ -1220,6 +1233,10 @@ enum ofp_flow_match_fields {
     OFPFMF_NW_SRC      = 1 << 13, /* IP source address. */
     OFPFMF_NW_DST      = 1 << 14, /* IP destination address. */
     OFPFMF_METADATA    = 1 << 15, /* Metadata passed between tables. */
+    OFPFMF_RM_TREE     = 1 << 16,
+    OFPFMF_RM_SRC      = 1 << 17,
+    OFPFMF_RM_DEST     = 1 << 18,
+    OFPFMP_RM_DATA     = 1 << 19,
 };
 
 /* Body of reply to OFPST_TABLE request. */

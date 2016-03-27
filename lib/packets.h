@@ -115,6 +115,7 @@ static inline bool eth_addr_is_reserved(const uint8_t ea[ETH_ADDR_LEN])
 #define ETH_TYPE_VLAN_PBB      0x88a8
 #define ETH_TYPE_MPLS          0x8847
 #define ETH_TYPE_MPLS_MCAST    0x8848
+//adding support for reverse multicast
 
 #define ETH_HEADER_LEN 14
 #define ETH_PAYLOAD_MIN 46
@@ -207,6 +208,8 @@ BUILD_ASSERT_DECL(VLAN_ETH_HEADER_LEN == sizeof(struct vlan_eth_header));
 #define IP_TYPE_TCP    6
 #define IP_TYPE_UDP   17
 #define IP_TYPE_SCTP 132
+//added support for IP type for RM
+#define IP_TYPE_RM 143
 
 #define IP_VERSION 4
 
@@ -249,6 +252,17 @@ struct udp_header {
     uint16_t udp_csum;
 };
 BUILD_ASSERT_DECL(UDP_HEADER_LEN == sizeof(struct udp_header));
+//support Reverse multicast
+#define RM_HEADER_LEN 11
+struct rm_header {
+    uint16_t tree_id;
+    uint16_t src_id;
+    uint16_t dest_id;
+    uint32_t seq_no;
+    uint8_t data_type;
+};
+
+BUILD_ASSERT_DECL(RM_HEADER_LEN == sizeof(struct rm_header));
 
 #define TCP_FIN 0x01
 #define TCP_SYN 0x02
