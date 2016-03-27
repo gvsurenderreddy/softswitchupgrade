@@ -740,12 +740,12 @@ xor_packet_from_queue(struct packet *pkt0, struct ofl_bme_xor_packet *action,uin
 }
 
 /* 
-#+begin_ditaa
+#+begin_data
          +---------------+------------+------+
    pkt : |MPLS mpls-label|MPLS seq.no | data |
          |   (flow-id)   |            |      |
          +---------------+------------+------+
-#+end_ditaa
+#+end_data
 */
 static void
 serialize(struct packet *pkt0, struct ofl_bme_serialize *action)
@@ -796,23 +796,24 @@ serialize(struct packet *pkt0, struct ofl_bme_serialize *action)
     }
     list_push_back((struct list*)&pl->seq, (struct list*)pending);
 }
-
+/*
 static void
 get_coordinates(uint64_t addr, int *x, int *y)
 {
-    static const uint64_t mask = 0x0000000000FFFFFFULL; /* m24 */
+    static const uint64_t mask = 0x0000000000FFFFFFULL; 
 
 #if __BYTE_ORDER == __BIG_ENDIAN
-    /* checking for big_endianness does not provide full portability.
-     * moreover, __builtin_bswap64 is gcc specific.
-     */
+     checking for big_endianness does not provide full portability.
+      moreover, __builtin_bswap64 is gcc specific.
+     
     addr = __builtin_bswap64(addr);
 #endif
 
     *x = addr & mask;
     *y = (addr >> (3 * 8)) & mask;
 }
-
+*/
+/*
 static void
 update_distance_in_metadata(struct packet *pkt,
 			    struct ofl_bme_update_distance *action)
@@ -847,7 +848,7 @@ update_distance_in_metadata(struct packet *pkt,
 	}
     }
 }
-
+*/
 void
 dp_exp_bme_action(struct packet *pkt, struct ofl_action_experimenter *act)
 {
@@ -855,25 +856,25 @@ dp_exp_bme_action(struct packet *pkt, struct ofl_action_experimenter *act)
 	(struct ofl_bme_action_header *)act;
 
     switch (exp->type) {
-    case BME_OUTPUT_BY_METADATA:
-	output_by_metadata( pkt );
-	break;
-    case BME_SET_METADATA_FROM_PACKET:
-	set_metadata_from_packet( pkt, (struct ofl_bme_set_metadata *) exp );
-	break;
-    case BME_SET_MPLS_LABEL_FROM_COUNTER:
-	set_mpls_label_from_counter( pkt,
-				     (struct ofl_bme_set_mpls_label *) exp );
-	break;
-    case BME_XOR_DECODE:
-    case BME_XOR_ENCODE:
+    //case BME_OUTPUT_BY_METADATA:
+	//output_by_metadata( pkt );
+	//break;
+    //case BME_SET_METADATA_FROM_PACKET:
+	//set_metadata_from_packet( pkt, (struct ofl_bme_set_metadata *) exp );
+	//break;
+    //case BME_SET_MPLS_LABEL_FROM_COUNTER:
+	//set_mpls_label_from_counter( pkt,
+	//			     (struct ofl_bme_set_mpls_label *) exp );
+	//break;
+    //case BME_XOR_DECODE:
+    case BME_XOR_CODE:
 	xor_packet_from_queue( pkt, (struct ofl_bme_xor_packet *)exp,
 			       exp->type );
 	break;
-    case BME_UPDATE_DISTANCE_IN_METADATA:
-	update_distance_in_metadata( pkt,
-				     (struct ofl_bme_update_distance *)exp );
-	break;
+    //case BME_UPDATE_DISTANCE_IN_METADATA:
+	//update_distance_in_metadata( pkt,
+	//			     (struct ofl_bme_update_distance *)exp );
+	//break;
     case BME_SET_METADATA_FROM_COUNTER: {
 	typedef struct ofl_bme_set_metadata_from_counter ofl_t;
 	set_metadata_from_counter( pkt, (ofl_t *)exp );
