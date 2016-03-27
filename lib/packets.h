@@ -252,17 +252,7 @@ struct udp_header {
     uint16_t udp_csum;
 };
 BUILD_ASSERT_DECL(UDP_HEADER_LEN == sizeof(struct udp_header));
-//support Reverse multicast
-#define RM_HEADER_LEN 11
-struct rm_header {
-    uint16_t tree_id;
-    uint16_t src_id;
-    uint16_t dest_id;
-    uint32_t seq_no;
-    uint8_t data_type;
-};
 
-BUILD_ASSERT_DECL(RM_HEADER_LEN == sizeof(struct rm_header));
 
 #define TCP_FIN 0x01
 #define TCP_SYN 0x02
@@ -342,6 +332,15 @@ struct mpls_header {
 
 BUILD_ASSERT_DECL(MPLS_HEADER_LEN == sizeof(struct mpls_header));
 
-
+//support Reverse multicast
+#define RM_HEADER_LEN 11
+struct rm_header {
+    uint16_t tree_id;
+    uint16_t src_id;
+    uint16_t dest_id;
+    uint32_t seq_no;
+    uint8_t data_type;
+};
+BUILD_ASSERT_DECL(RM_HEADER_LEN == sizeof(struct rm_header));
 
 #endif /* packets.h */

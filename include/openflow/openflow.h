@@ -390,7 +390,7 @@ enum ofp_action_type {
     OFPAT_GROUP,            /* Apply group. */
     OFPAT_SET_NW_TTL,       /* IP TTL. */
     OFPAT_DEC_NW_TTL,       /* Decrement IP TTL. */
-    
+    //reverse multicast protocol, have to add action structures
     OFPAT_SET_RM_TREE,      /* set the reverse multicast tree ID */
     OFPAT_SET_RM_SRC,       /* set the reverse multicast source ID */
     OFPAT_SET_RM_DEST,      /* set the reverse multicast destination ID */
@@ -411,6 +411,9 @@ struct ofp_action_output {
     uint8_t pad[6];                 /* Pad to 64 bits. */
 };
 OFP_ASSERT(sizeof(struct ofp_action_output) == 16);
+
+
+
 
 /* Action structure for OFPAT_SET_VLAN_VID. */
 struct ofp_action_vlan_vid {
@@ -447,6 +450,9 @@ struct ofp_action_nw_addr {
 };
 OFP_ASSERT(sizeof(struct ofp_action_nw_addr) == 8);
 
+
+
+
 /* Action structure for OFPAT_SET_TP_SRC/DST. */
 struct ofp_action_tp_port {
     uint16_t type;                  /* OFPAT_SET_TP_SRC/DST. */
@@ -456,6 +462,37 @@ struct ofp_action_tp_port {
 };
 OFP_ASSERT(sizeof(struct ofp_action_tp_port) == 8);
 
+//Updated actions pertaining to seting values in reverse multicast protocol=============================================
+
+struct ofp_action_set_rm_tree {
+    uint16_t type;                  /* OFPAT_SET_TP_SRC/DST. */
+    uint16_t len;                   /* Length is 8. */
+    uint16_t tree_id;               /* TCP/UDP/SCTP port. */
+    uint8_t pad[2];
+};
+OFP_ASSERT(sizeof(struct ofp_action_rm_tree) == 8);
+struct ofp_action_set_rm_src {
+    uint16_t type;                  /* OFPAT_SET_TP_SRC/DST. */
+    uint16_t len;                   /* Length is 8. */
+    uint16_t src_id;               /* source storage node id */
+    uint8_t pad[2];
+};
+OFP_ASSERT(sizeof(struct ofp_action_rm_src) == 8);
+struct ofp_action_set_rm_dest {
+    uint16_t type;                  /* OFPAT_SET_TP_SRC/DST. */
+    uint16_t len;                   /* Length is 8. */
+    uint16_t dest_id;               /* dest storage node id */
+    uint8_t pad[2];
+};
+OFP_ASSERT(sizeof(struct ofp_action_rm_dest) == 8);
+struct ofp_action_set_rm_data_type {
+    uint16_t type;                  /* OFPAT_SET_TP_SRC/DST. */
+    uint16_t len;                   /* Length is 8. */
+    uint8_t data_type;               /* Data-type */
+    uint8_t pad[2];
+};
+OFP_ASSERT(sizeof(struct ofp_action_rm_data_type) == 8);
+//=======================================================================================================
 /* Action structure for OFPAT_SET_NW_TOS. */
 struct ofp_action_nw_tos {
     uint16_t type;                  /* OFPAT_SET_TW_SRC/DST. */
@@ -677,11 +714,12 @@ struct ofp_match {
     uint16_t tp_dst;           /* TCP/UDP/SCTP destination port. */
     uint32_t mpls_label;       /* MPLS label. */
     uint8_t mpls_tc;           /* MPLS TC. */
-    //added RM features
+    //added RM features======================================
     uint16_t tree_id;          /* RM tree ID */
     uint16_t src_id;           /* RM source ID */
     uint16_t dest_id;          /* RM dest ID */
     uint8_t data_type          /*RM data_type ID*/
+    //==========================================================
     uint8_t pad2[3];           /* Align to 64-bits */
     uint64_t metadata;         /* Metadata passed between tables. */
     uint64_t metadata_mask;    /* Mask for metadata. */
@@ -1233,10 +1271,10 @@ enum ofp_flow_match_fields {
     OFPFMF_NW_SRC      = 1 << 13, /* IP source address. */
     OFPFMF_NW_DST      = 1 << 14, /* IP destination address. */
     OFPFMF_METADATA    = 1 << 15, /* Metadata passed between tables. */
-    OFPFMF_RM_TREE     = 1 << 16,
+    OFPFMF_RM_TREE     = 1 << 16, //reverse multicast protocol introduction
     OFPFMF_RM_SRC      = 1 << 17,
     OFPFMF_RM_DEST     = 1 << 18,
-    OFPFMP_RM_DATA     = 1 << 19,
+    OFPFMP_RM_DATA_TYPE     = 1 << 19,
 };
 
 /* Body of reply to OFPST_TABLE request. */
