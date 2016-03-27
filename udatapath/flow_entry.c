@@ -181,7 +181,7 @@ make_mod_match(struct ofl_match_header *match) {
         struct ofl_match_standard *m = memcpy(xmalloc(OFPMT_STANDARD_LENGTH), match, OFPMT_STANDARD_LENGTH);
 
         /* NOTE: According to 1.1 spec. only those protocols' fields should be taken into
-                 account, which are explicitly matched (MPLS, ARP, IP, TCP, UDP).
+                 account, which are explicitly matched (MPLS, ARP, IP, TCP, UDP, RM).
                  the rest of the fields are wildcarded in the created match. */
 
         /* IPv4 / ARP */
@@ -197,8 +197,18 @@ make_mod_match(struct ofl_match_header *match) {
         if (((m->wildcards & OFPFW_NW_PROTO) != 0) ||
             (m->nw_proto != IP_TYPE_ICMP && m->nw_proto != IP_TYPE_TCP &&
              m->nw_proto != IP_TYPE_UDP  && m->nw_proto != IP_TYPE_SCTP)) {
+            if(m->nw_proto == IP_TYPE_RM) //added reverse multicast support
+            {
+                m->wildcards |= OFPFW_RM_TREE;
+                m->wildcards |= OFPFW_RM_SRC;
+                m->wildcards |= OFPFW_RM_DEST;
+                m->wildcards |= OFPFW_RM_DATA_TYPE;
+                
+            }
+            else{
             m->wildcards |= OFPFW_TP_SRC;
             m->wildcards |= OFPFW_TP_DST;
+            }
         }
 
         /* MPLS */

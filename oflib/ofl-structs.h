@@ -187,7 +187,10 @@ struct ofl_match_standard {
     uint16_t   tp_dst;           /* TCP/UDP/SCTP destination port, or ICMP code. */
     uint32_t   mpls_label;       /* MPLS label. */
     uint8_t    mpls_tc;           /* MPLS TC. */
-
+    uint16_t tree_id;
+    uint16_t src_id;
+    uint16_t dest_id;
+    uint8_t data_type;
     uint64_t   metadata;         /* Metadata passed between tables. */
     uint64_t   metadata_mask;    /* Mask for metadata. */
 };

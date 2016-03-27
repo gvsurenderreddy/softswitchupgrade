@@ -258,6 +258,23 @@ set_metadata_from_packet(struct packet *pkt,
 	value = match->mpls_tc;
 	mask = m8;
     }
+    //reverse multicast support
+    if (act->field & OFPFMF_RM_TREE) { /* MPLS TC. */
+	value = match->tree_id;
+	mask = m16;
+    }
+    if (act->field & OFPFMF_RM_SRC) { /* MPLS TC. */
+	value = match->src_id;
+	mask = m16;
+    }
+    if (act->field & OFPFMF_RM_DEST) { /* MPLS TC. */
+	value = match->dest_id;
+	mask = m16;
+    }if (act->field & OFPFMF_RM_DATA_TYPE) { /* MPLS TC. */
+	value = match->data_type;
+	mask = m8;
+    }
+    
     if (act->field & OFPFMF_TYPE) { /* Match type. */
 	VLOG_WARN_RL(LOG_MODULE, &rl,
 		     "BME_set_metadata: OFPFMF_TYPE is not supported");

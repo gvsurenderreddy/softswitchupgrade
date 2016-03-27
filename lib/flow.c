@@ -203,7 +203,6 @@ flow_extract(struct ofpbuf *packet, uint32_t in_port, struct flow *flow)
                     } else if (flow->nw_proto == IP_TYPE_RM) {
                         const struct rm_header *rh = pull_rm(&b);
                         if (rh) {
-                            
                             flow->tree_id = rm->tree_id;
                             flow->src_id = rm->src_id;
                             flow->dest_id = rm->dest_id;

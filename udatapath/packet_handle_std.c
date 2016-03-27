@@ -266,7 +266,21 @@ packet_handle_std_validate(struct packet_handle_std *handle) {
                 m->tp_dst = proto->icmp->icmp_code;
 
                 return;
+            } else if (m->nw_proto == IP_TYPE_RM) {
+                if (pkt->buffer->size < offset + sizeof(struct rm_header)) {
+                    return;
+                }
+                //not exactly sure
+                proto->rm = (struct rm_header *)((uint8_t *)pkt->buffer->data + offset);
+                offset += sizeof(struct rm_header);
 
+                //m->tp_src = proto->icmp->icmp_type;
+                //m->tp_dst = proto->icmp->icmp_code;
+                m->tree_id = proto->rm->tree_id;
+                m->src_id = proto->rm->src_id;
+                m->dest_id = proto->rm->dest_id;
+                m->data_type = proto->rm->data_type;
+                return;
             } else if (m->nw_proto == IP_TYPE_SCTP) {
                 if (pkt->buffer->size < offset + sizeof(struct sctp_header)) {
                     return;
@@ -368,7 +382,7 @@ static void
 proto_print(FILE *stream, struct protocols_std *p) {
     fprintf(stream, "{%s%s%s%s%s%s%s%s%s}",
             pstr(p->eth, "eth"), pstr(p->vlan, ",vlan"), pstr(p->mpls, ",mpls"), pstr(p->ipv4, ",ipv4"),
-            pstr(p->arp, ",arp"), pstr(p->tcp, ",tcp"), pstr(p->udp, ",udp"), pstr(p->sctp, ",sctp"),
+            pstr(p->arp, ",arp"), pstr(p->tcp, ",tcp"), pstr(p->udp, ",udp"), pstr(p->sctp, ",sctp"),pstr(p->rm, ",rm"),
             pstr(p->icmp, ",icmp"));
 }
 

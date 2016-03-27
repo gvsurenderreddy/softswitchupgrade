@@ -53,6 +53,7 @@ struct protocols_std {
     struct arp_eth_header  *arp;
     struct tcp_header      *tcp;
     struct udp_header      *udp;
+    struct rm_header      *rm;
     struct sctp_header     *sctp;
     struct icmp_header     *icmp;
 };

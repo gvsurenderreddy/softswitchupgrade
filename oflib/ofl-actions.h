@@ -141,7 +141,32 @@ struct ofl_action_set_nw_ttl {
 
     uint8_t   nw_ttl;
 };
+//adding reverse multicast capability
+struct ofl_action_set_rm_tree {
+    struct ofl_action_header   header; /* OFPAT_SET_NW_TTL. */
 
+    uint16_t  tree_id;
+
+};
+struct ofl_action_set_rm_src {
+    struct ofl_action_header   header; /* OFPAT_SET_NW_TTL. */
+
+    uint16_t  src_id;
+
+};
+struct ofl_action_set_rm_dest {
+    struct ofl_action_header   header; /* OFPAT_SET_NW_TTL. */
+
+    uint16_t  dest_id;
+
+};
+struct ofl_action_set_rm_data_type {
+    struct ofl_action_header   header; /* OFPAT_SET_NW_TTL. */
+
+    uint8_t  data_type;
+
+};
+/////////////////////////////////////////////////////////////////////////////////////
 struct ofl_action_group {
     struct ofl_action_header   header; /* OFPAT_GROUP. */
 

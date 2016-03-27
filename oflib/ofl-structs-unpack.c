@@ -796,6 +796,12 @@ ofl_structs_match_standard_unpack(struct ofp_match *src, size_t *len, struct ofl
     m->mpls_label =    ntohl( src->mpls_label);
     m->mpls_tc =              src->mpls_tc;
 
+    //Reverse Multicast
+    m->tree_id = ntohl(src->tree_id);
+    m->src_id = ntohl(src->src_id);
+    m->dest_id = ntohl(src->dest_id);
+    m->data_type = ntohl(src->data_type);
+    
     /* Metadata */
     m->metadata =      ntoh64(src->metadata);
     m->metadata_mask = ntoh64(src->metadata_mask);
