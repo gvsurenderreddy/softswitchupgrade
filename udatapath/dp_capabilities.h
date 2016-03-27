@@ -101,7 +101,12 @@
                                   | OFPFMF_NW_SRC         \
                                   | OFPFMF_NW_SRC         \
                                   | OFPFMF_NW_DST         \
-                                  | OFPFMF_METADATA )
-
+                                  | OFPFMF_RM_SRC         \
+                                  | OFPFMF_RM_TREE        \
+                                  | OFPFMF_RM_DEST        \
+                                  | OFPFMF_RM_DATA_TYPE   \
+                                  | OFPFMF_METADATA       \
+                                  )
+//added RM matching fields above
 
 #endif /* DP_CAPABILITIES_H */

@@ -56,6 +56,8 @@ protocol_reset(struct protocols_std *proto) {
     proto->udp       = NULL;
     proto->sctp      = NULL;
     proto->icmp      = NULL;
+    //added reverse multicast
+    proto->rm        = NULL;
 }
 
 void
