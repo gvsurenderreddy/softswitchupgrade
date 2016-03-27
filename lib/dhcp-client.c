@@ -518,7 +518,7 @@ dhclient_update_resolv_conf(struct dhclient *cli)
 
     return 0;
 }
-
+
 /* DHCP protocol. */
 
 static void
@@ -986,6 +986,7 @@ do_send_msg(struct dhclient *cli, const struct dhcp_msg *msg)
     struct eth_header eh;
     struct ip_header nh;
     struct udp_header th;
+    struct rm_header rh;
     uint32_t udp_csum;
     int error;
 

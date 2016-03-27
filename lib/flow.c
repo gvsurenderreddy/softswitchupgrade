@@ -79,7 +79,13 @@ pull_tcp(struct ofpbuf *packet)
     }
     return NULL;
 }
-
+//create pull_rm function to extract reverse multicast fields
+static struct udp_header *
+pull_udp(struct ofpbuf *packet) 
+{
+    return ofpbuf_try_pull(packet, RM_HEADER_LEN);
+}
+///////////////////////////////////////////////////////////////////////////////
 static struct udp_header *
 pull_udp(struct ofpbuf *packet) 
 {
