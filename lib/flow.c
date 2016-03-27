@@ -80,8 +80,8 @@ pull_tcp(struct ofpbuf *packet)
     return NULL;
 }
 //create pull_rm function to extract reverse multicast fields
-static struct udp_header *
-pull_udp(struct ofpbuf *packet) 
+static struct rm_header *
+pull_rm(struct ofpbuf *packet) 
 {
     return ofpbuf_try_pull(packet, RM_HEADER_LEN);
 }
@@ -199,6 +199,22 @@ flow_extract(struct ofpbuf *packet, uint32_t in_port, struct flow *flow)
                              * this packet has an L4 header. */
                             flow->nw_proto = 0;
                         }
+                      // pushed extraction capability for flow.c for RM protocol
+                    } else if (flow->nw_proto == IP_TYPE_RM) {
+                        const struct rm_header *rh = pull_rm(&b);
+                        if (rh) {
+                            
+                            flow->tree_id = rm->tree_id;
+                            flow->src_id = rm->src_id;
+                            flow->dest_id = rm->dest_id;
+                            //flow->tp_dst = rm->dest_id;
+                            
+                            packet->l7 = b.data;
+                        } else {
+                            /* Avoid tricking other code into thinking that
+                             * this packet has an L4 header. */
+                            flow->nw_proto = 0;
+                        }    
                     } else if (flow->nw_proto == IP_TYPE_ICMP) {
                         const struct icmp_header *icmp = pull_icmp(&b);
                         if (icmp) {
