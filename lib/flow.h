@@ -59,10 +59,10 @@ struct flow {
     uint8_t dl_vlan_pcp;        /* Input VLAN priority. */
     uint8_t nw_tos;             /* IPv4 DSCP. */
     uint8_t nw_proto;           /* IP protocol. */
-    uint16_t tree_id            //Reverse multicast headers
-    uint16_t src_id
-    uint16_t dest_id
-    uint8_t data_type
+    uint16_t tree_id;            //Reverse multicast headers
+    uint16_t src_id;
+    uint16_t dest_id;
+    uint8_t data_type;
     uint8_t pad[5];
 };
 BUILD_ASSERT_DECL(sizeof(struct flow) == 40);
