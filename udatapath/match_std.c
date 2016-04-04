@@ -92,7 +92,7 @@ strict_dladdr(uint8_t *a, uint8_t *b, uint8_t *am, uint8_t *bm) {
 	return strict_mask32(*((uint32_t *)a), *((uint32_t *)b), *((uint32_t *)am), *((uint32_t *)bm)) &&
 		   strict_mask16(*((uint16_t *)(a+4)), *((uint16_t *)(b+4)), *((uint16_t *)(am+4)), *((uint16_t *)(bm+4)));}
 
-
+//need to add RM here
 bool
 match_std_strict(struct ofl_match_standard *a, struct ofl_match_standard *b) {
 	return strict_wild32(a->in_port, b->in_port, a->wildcards, b->wildcards, OFPFW_IN_PORT) &&
@@ -175,7 +175,7 @@ nonstrict_dlvpcp(uint16_t avlan, uint16_t apcp, uint16_t bvlan, uint16_t bpcp, u
 	return (wc(bw, f) && wc(aw, f)) ||
 	      (~wc(bw, f) && (wc(aw, f) || (avlan == OFPVID_NONE && bvlan == OFPVID_NONE) || apcp == bpcp));
 }
-
+//need to add here
 bool
 match_std_nonstrict(struct ofl_match_standard *a, struct ofl_match_standard *b) {
 	return nonstrict_wild32(a->in_port, b->in_port, a->wildcards, b->wildcards, OFPFW_IN_PORT) &&
@@ -246,7 +246,7 @@ pkt_dlvpcp(uint16_t avlan, uint16_t apcp, uint16_t bvlan, uint16_t bpcp, uint32_
 	uint32_t f = OFPFW_DL_VLAN_PCP;
 	return wc(aw, f) || (avlan == OFPVID_NONE && bvlan == OFPVID_NONE) || apcp == bpcp;
 }
-
+//need to add here
 bool
 match_std_pkt(struct ofl_match_standard *a, struct ofl_match_standard *b) {
 	return pkt_wild32(a->in_port, b->in_port, a->wildcards, OFPFW_IN_PORT) &&
