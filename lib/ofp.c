@@ -206,6 +206,11 @@ make_flow_mod(uint8_t command, uint8_t table_id,
     ofm->match.nw_tos = flow->nw_tos;
     ofm->match.tp_src = flow->tp_src;
     ofm->match.tp_dst = flow->tp_dst;
+    ofm->match.tp_src = flow->tp_src;
+    //added functionality for RM in ofp.c
+    ofm->match.tree_id = flow->tree_id;
+    ofm->match.src_id = flow->src_id;
+    ofm->match.dest_id = flow->dest_id;
     ofm->command = command;
     ofm->table_id = table_id;
     return out;

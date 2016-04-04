@@ -94,6 +94,11 @@ action_set_order(struct ofl_action_header *act) {
         case (OFPAT_SET_NW_TTL):     return 60;
         case (OFPAT_DEC_NW_TTL):     return 50;
         case (OFPAT_EXPERIMENTER):   return 75;
+        //reverse multicast additions
+        case (OFPAT_SET_RM_TREE_ID): return 71;
+        case (OFPAT_SET_RM_SRC_ID):  return 72;
+        case (OFPAT_SET_RM_DEST_ID): return 73;
+        case (OFPAT_SET_RM_DATA_TYPE): return 74;
         default:                     return 79;
     }
 }

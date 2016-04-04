@@ -259,18 +259,18 @@ set_metadata_from_packet(struct packet *pkt,
 	mask = m8;
     }
     //reverse multicast support
-    if (act->field & OFPFMF_RM_TREE) { /* MPLS TC. */
+    if (act->field & OFPFMF_RM_TREE) { /* RM TREE ID. */
 	value = match->tree_id;
 	mask = m16;
     }
-    if (act->field & OFPFMF_RM_SRC) { /* MPLS TC. */
+    if (act->field & OFPFMF_RM_SRC) { /* RM SRC ID. */
 	value = match->src_id;
 	mask = m16;
     }
-    if (act->field & OFPFMF_RM_DEST) { /* MPLS TC. */
+    if (act->field & OFPFMF_RM_DEST) { /* RM DEST ID */
 	value = match->dest_id;
 	mask = m16;
-    }if (act->field & OFPFMF_RM_DATA_TYPE) { /* MPLS TC. */
+    }if (act->field & OFPFMF_RM_DATA_TYPE) { /* RM Data-type ID */
 	value = match->data_type;
 	mask = m8;
     }
@@ -337,7 +337,8 @@ set_field_from_metadata(struct packet *pkt,
     
     if (act->field & OFPFMF_RM_SRC) { /* RM SRC ID label. */
 	uint32_t label = (uint32_t)(metadata >> offset);
-	set_RM_SRC_label(pkt, label);
+	//need to fix this
+	//set_RM_SRC_label(pkt, label);
 	return;
     }
     /*

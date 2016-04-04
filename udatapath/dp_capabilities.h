@@ -81,7 +81,11 @@
                              | (1 << OFPAT_SET_QUEUE)       \
                              | (1 << OFPAT_GROUP)           \
                              | (1 << OFPAT_SET_NW_TTL)      \
-                             | (1 << OFPAT_DEC_NW_TTL) )
+                             | (1 << OFPAT_DEC_NW_TTL) )    \
+                             | (1 << OFPAT_SET_RM_TREE_ID)  \
+                             | (1 << OFPAT_SET_RM_SRC_ID)   \
+                             | (1 << OFPAT_SET_RM_DEST_ID)  \
+                             | (1 << OFPAT_SET_RM_DATA_TYPE)
 
 #define DP_SUPPORTED_WILDCARDS    OFPFW_ALL
 

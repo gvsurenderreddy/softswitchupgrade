@@ -179,7 +179,79 @@ set_nw_dst(struct packet *pkt, struct ofl_action_nw_addr *act) {
         VLOG_WARN_RL(LOG_MODULE, &rl, "Trying to execute SET_NW_DST action on packet with no nw.");
     }
 }
+//make a copy here, update tp_port, ofl_action_tp_port
+//==============================================================================================
+static void
+set_rm_tree(struct packet *pkt, struct ofl_action_tp_port *act) {
+    packet_handle_std_validate(pkt->handle_std);
+    if (pkt->handle_std->proto->rm != NULL) {
+        struct rm_header *rmh = pkt->handle_std->proto->rm;
 
+        //tcp->tcp_csum = recalc_csum16(tcp->tcp_csum, tcp->tcp_src, htons(act->tp_port));
+        //replace tp_port with something else
+        rmh->tree_id = htons(act->tp_port);
+
+        pkt->handle_std->match->tree_id = act->tp_port;
+
+    } 
+    } else {
+        VLOG_WARN_RL(LOG_MODULE, &rl, "Trying to execute SET_RM_TREE action on packet with no tp.");
+    }
+}
+
+static void
+set_rm_src(struct packet *pkt, struct ofl_action_tp_port *act) {
+    packet_handle_std_validate(pkt->handle_std);
+    if (pkt->handle_std->proto->rm != NULL) {
+        struct rm_header *rmh = pkt->handle_std->proto->rm;
+
+        //tcp->tcp_csum = recalc_csum16(tcp->tcp_csum, tcp->tcp_src, htons(act->tp_port));
+        //replace tp_port with something else
+        rmh->src_id = htons(act->tp_port);
+
+        pkt->handle_std->match->src_id = act->tp_port;
+
+    } 
+    } else {
+        VLOG_WARN_RL(LOG_MODULE, &rl, "Trying to execute SET_RM_SRC action on packet with no tp.");
+    }
+}
+
+/* Executes set tp dst action. */
+static void
+set_rm_dest(struct packet *pkt, struct ofl_action_tp_port *act) {
+    packet_handle_std_validate(pkt->handle_std);
+    if (pkt->handle_std->proto->rm != NULL) {
+        struct tcp_header *rmh = pkt->handle_std->proto->rm;
+
+        //tcp->tcp_csum = recalc_csum16(tcp->tcp_csum, tcp->tcp_dst, htons(act->tp_port));
+        rmh->dest_id = htons(act->tp_port);
+
+        pkt->handle_std->match->dest_id = act->tp_port;
+
+    } else {
+        VLOG_WARN_RL(LOG_MODULE, &rl, "Trying to execute SET_RM_DST action on packet with no tp.");
+    }
+}
+static void
+set_rm_data_type(struct packet *pkt, struct ofl_action_tp_port *act) {
+    packet_handle_std_validate(pkt->handle_std);
+    if (pkt->handle_std->proto->rm != NULL) {
+        struct rm_header *rmh = pkt->handle_std->proto->rm;
+
+        //tcp->tcp_csum = recalc_csum16(tcp->tcp_csum, tcp->tcp_src, htons(act->tp_port));
+        //replace tp_port with something else
+        rmh->data_type = htons(act->tp_port);
+
+        pkt->handle_std->match->data_type = act->tp_port;
+
+    } 
+    } else {
+        VLOG_WARN_RL(LOG_MODULE, &rl, "Trying to execute SET_RM_DATA_TYPE action on packet with no tp.");
+    }
+}
+
+//==============================================================================================
 /* Executes set tp src action. */
 static void
 set_tp_src(struct packet *pkt, struct ofl_action_tp_port *act) {
@@ -204,6 +276,8 @@ set_tp_src(struct packet *pkt, struct ofl_action_tp_port *act) {
         VLOG_WARN_RL(LOG_MODULE, &rl, "Trying to execute SET_TP_SRC action on packet with no tp.");
     }
 }
+
+
 
 
 /* Executes set tp dst action. */
@@ -727,6 +801,33 @@ dp_execute_action(struct packet *pkt,
             set_tp_src(pkt, (struct ofl_action_tp_port *)action);
             break;
         }
+        case (OFPAT_SET_TP_DST): {
+            set_tp_dst(pkt, (struct ofl_action_tp_port *)action);
+            break;
+        }
+        //===========================================================================================/
+        
+        //need to update ofl_Action_tp_port structure for RM
+        case (OFPAT_SET_RM_TREE_ID): {
+            set_rm_tree(pkt, (struct ofl_action_tp_port *)action);
+            break;
+        }
+        case (OFPAT_SET_RM_SRC_ID): {
+            set_rm_src(pkt, (struct ofl_action_tp_port *)action);
+            break;
+        }
+        case (OFPAT_SET_RM_DEST_ID): {
+            set_rm_dest(pkt, (struct ofl_action_tp_port *)action);
+            break;
+        }
+        case (OFPAT_SET_RM_DATA_TYPE): {
+            set_rm_data_type(pkt, (struct ofl_action_tp_port *)action);
+            break;
+        }
+        
+        
+        
+        //==============================================================================================/
         case (OFPAT_SET_TP_DST): {
             set_tp_dst(pkt, (struct ofl_action_tp_port *)action);
             break;
