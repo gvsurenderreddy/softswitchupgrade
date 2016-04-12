@@ -68,6 +68,7 @@
 #include "util.h"
 
 #define LOG_MODULE VLM_ofp
+#define IPPROTO_RM 143
 #include "vlog.h"
 
 /* XXX we should really use consecutive xids to avoid probabilistic
@@ -685,7 +686,7 @@ check_action(const union ofp_action *a, unsigned int len, int max_ports,
 	oao = (const struct ofp_action_output *) a;
         return check_output_port(ntohl(oao->port), max_ports, is_packet_out);
     }
-    case OFPAT
+    
     case OFPAT_SET_VLAN_VID:
     case OFPAT_SET_VLAN_PCP:
     case OFPAT_POP_VLAN:
@@ -817,7 +818,8 @@ normalize_match(struct ofp_match *m)
             m->tp_src = m->tp_dst = 0;
         } else if (m->nw_proto == IPPROTO_TCP ||
                    m->nw_proto == IPPROTO_UDP ||
-                   m->nw_proto == IPPROTO_ICMP) {
+                   m->nw_proto == IPPROTO_ICMP ||
+                   ) {
             if (wc & OFPFW_TP_SRC) {
                 m->tp_src = 0;
             }
@@ -837,14 +839,7 @@ normalize_match(struct ofp_match *m)
         } else {
             m->nw_tos &= IP_DSCP_MASK;
         }
-    } else if (m->dl_type == htons(ETH_TYPE_ARP)) {
-        if (wc & OFPFW_NW_PROTO) {
-            m->nw_proto = 0;
-        }
-	m->nw_src &= ~m->nw_src_mask;
-	m->nw_dst &= ~m->nw_dst_mask;
-        m->tp_src = m->tp_dst = m->nw_tos = 0;
-    } else {
+    } else if (m->dl_type == htons(ETH_TYPE_ARP)) {IPPROTO_RM} else {
         /* Network and transport layer fields will always be extracted as
          * zeros, so we can do an exact-match on those values. */
         wc &= ~(OFPFW_NW | OFPFW_TP);

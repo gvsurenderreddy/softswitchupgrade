@@ -53,6 +53,12 @@ ofl_actions_free(struct ofl_action_header *act, struct ofl_exp *exp) {
         case OFPAT_SET_NW_ECN:
         case OFPAT_SET_TP_SRC:
         case OFPAT_SET_TP_DST:
+        /////////////////////////////////////////
+         case OFPAT_SET_RM_SRC:
+         case 
+         
+         
+         /////////////////////////////////////////
         case OFPAT_COPY_TTL_OUT:
         case OFPAT_COPY_TTL_IN:
         case OFPAT_SET_MPLS_LABEL:
