@@ -207,11 +207,12 @@ make_flow_mod(uint8_t command, uint8_t table_id,
     ofm->match.nw_tos = flow->nw_tos;
     ofm->match.tp_src = flow->tp_src;
     ofm->match.tp_dst = flow->tp_dst;
-    ofm->match.tp_src = flow->tp_src;
-    //added functionality for RM in ofp.c
+   
+    //added functionality for RM in ofp.c=====================================================================================================
     ofm->match.tree_id = flow->tree_id;
     ofm->match.src_id = flow->src_id;
     ofm->match.dest_id = flow->dest_id;
+    //==========================================================================================================================================
     ofm->command = command;
     ofm->table_id = table_id;
     return out;
@@ -693,12 +694,17 @@ check_action(const union ofp_action *a, unsigned int len, int max_ports,
     case OFPAT_SET_NW_SRC:
     case OFPAT_SET_NW_DST:
     case OFPAT_SET_NW_TOS:
+   
+    case OFPAT_SET_RM_DATA_TYPE:
     case OFPAT_SET_TP_SRC:
     case OFPAT_SET_TP_DST:
         return check_action_exact_len(a, len, 8);
 
     case OFPAT_SET_DL_SRC:
     case OFPAT_SET_DL_DST:
+     case OFPAT_SET_RM_SRC:
+    case OFPAT_SET_RM_DEST:
+    case OFPAT_SET_RM_TREE:
         return check_action_exact_len(a, len, 16);
 
     case OFPAT_EXPERIMENTER:

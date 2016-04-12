@@ -260,6 +260,7 @@ flow_fill_match(struct ofp_match *to, const struct flow *from,
     to->nw_dst = from->nw_dst;
     to->tp_src = from->tp_src;
     to->tp_dst = from->tp_dst;
+
     to->dl_vlan_pcp = from->dl_vlan_pcp;
 }
 
