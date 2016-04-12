@@ -54,14 +54,16 @@ struct flow {
     uint16_t dl_type;           /* Ethernet frame type. */
     uint16_t tp_src;            /* TCP/UDP source port. */
     uint16_t tp_dst;            /* TCP/UDP destination port. */
+    
+    uint16_t tree_id;            //Reverse multicast headers
+    uint16_t src_id;            //
+    uint16_t dest_id;           //
+    
     uint8_t dl_src[6];          /* Ethernet source address. */
     uint8_t dl_dst[6];          /* Ethernet destination address. */
     uint8_t dl_vlan_pcp;        /* Input VLAN priority. */
     uint8_t nw_tos;             /* IPv4 DSCP. */
-    uint8_t nw_proto;           /* IP protocol. */
-    uint16_t tree_id;            //Reverse multicast headers
-    uint16_t src_id;
-    uint16_t dest_id;
+    uint8_t nw_proto;           /* IP protocol. */ //proto no - 143
     uint8_t data_type;
     uint8_t pad[5];
 };

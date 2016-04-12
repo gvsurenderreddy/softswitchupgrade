@@ -685,7 +685,7 @@ check_action(const union ofp_action *a, unsigned int len, int max_ports,
 	oao = (const struct ofp_action_output *) a;
         return check_output_port(ntohl(oao->port), max_ports, is_packet_out);
     }
-
+    case OFPAT
     case OFPAT_SET_VLAN_VID:
     case OFPAT_SET_VLAN_PCP:
     case OFPAT_POP_VLAN:

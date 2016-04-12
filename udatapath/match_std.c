@@ -92,7 +92,9 @@ strict_dladdr(uint8_t *a, uint8_t *b, uint8_t *am, uint8_t *bm) {
 	return strict_mask32(*((uint32_t *)a), *((uint32_t *)b), *((uint32_t *)am), *((uint32_t *)bm)) &&
 		   strict_mask16(*((uint16_t *)(a+4)), *((uint16_t *)(b+4)), *((uint16_t *)(am+4)), *((uint16_t *)(bm+4)));}
 
-//need to add RM here
+//need to add RM here with SRC ID AND DST ID getting strict 32 match
+//need to treet tree ID as a lable
+//need to think about masking
 bool
 match_std_strict(struct ofl_match_standard *a, struct ofl_match_standard *b) {
 	return strict_wild32(a->in_port, b->in_port, a->wildcards, b->wildcards, OFPFW_IN_PORT) &&
