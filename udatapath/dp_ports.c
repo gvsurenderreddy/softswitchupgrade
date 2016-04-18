@@ -306,7 +306,7 @@ new_port(struct datapath *dp, struct sw_port *port, uint32_t port_no,
         VLOG_ERR(LOG_MODULE, "%s device has assigned IPv6 address %s",
                  netdev_name, in6_name);
     }
-
+ 
     if (max_queues > 0) {
         error = netdev_setup_slicing(netdev, max_queues);
         if (error) {

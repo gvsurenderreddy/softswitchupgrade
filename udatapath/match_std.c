@@ -109,6 +109,12 @@ match_std_strict(struct ofl_match_standard *a, struct ofl_match_standard *b) {
 		   strict_mask32(a->nw_dst, b->nw_dst, a->nw_dst_mask, b->nw_dst_mask) &&
 		   strict_wild16(a->tp_src, b->tp_src, a->wildcards, b->wildcards, OFPFW_TP_SRC) &&
 		   strict_wild16(a->tp_dst, b->tp_dst, a->wildcards, b->wildcards, OFPFW_TP_DST) &&
+		   //================added RM part//
+		   strict_wild16(a->src_id, b->src_id, a->wildcards, b->wildcards, OFPFW_RM_SRC) &&
+		   strict_wild16(a->dest_id, b->dest_id, a->wildcards, b->wildcards, OFPFW_RM_DST) &&
+		   strict_wild16(a->tree_id, b->tree_id, a->wildcards, b->wildcards, OFPFW_RM_TREE) &&
+		   strict_wild8(a->data_type, b->data_type, a->wildcards, b->wildcards, OFPFW_RM_DATA_TYPE) &&
+		   //================added RM part//
 		   strict_wild32(a->mpls_label, b->mpls_label, a->wildcards, b->wildcards, OFPFW_MPLS_LABEL) &&
 		   strict_wild8 (a->mpls_tc, b->mpls_tc, a->wildcards, b->wildcards, OFPFW_MPLS_TC) &&
 		   strict_mask64(a->metadata, b->metadata, a->metadata_mask, b->metadata_mask);
@@ -190,8 +196,16 @@ match_std_nonstrict(struct ofl_match_standard *a, struct ofl_match_standard *b) 
 		   nonstrict_wild8 (a->nw_proto, b->nw_proto, a->wildcards, b->wildcards, OFPFW_NW_PROTO) &&
 		   nonstrict_mask32(a->nw_src, b->nw_src, a->nw_src_mask, b->nw_src_mask) &&
 		   nonstrict_mask32(a->nw_dst, b->nw_dst, a->nw_dst_mask, b->nw_dst_mask) &&
+		   
 		   nonstrict_wild16(a->tp_src, b->tp_src, a->wildcards, b->wildcards, OFPFW_TP_SRC) &&
 		   nonstrict_wild16(a->tp_dst, b->tp_dst, a->wildcards, b->wildcards, OFPFW_TP_DST) &&
+		   //========Added non-strict RM matching
+		   nonstrict_wild16(a->src_id, b->src_id, a->wildcards, b->wildcards, OFPFW_RM_SRC) &&
+		   nonstrict_wild16(a->dest_id, b->dest_id, a->wildcards, b->wildcards, OFPFW_RM_DST) &&
+		   nonstrict_wild16(a->tree_id, b->tree_id, a->wildcards, b->wildcards, OFPFW_RM_TREE) &&
+		   nonstrict_wild8(a->data_type, b->data_type, a->wildcards, b->wildcards, OFPFW_RM_DATA_TYPE) &&
+		   
+		   //=======Added non strict RM matching
 		   nonstrict_wild32(a->mpls_label, b->mpls_label, a->wildcards, b->wildcards, OFPFW_MPLS_LABEL) &&
 		   nonstrict_wild8 (a->mpls_tc, b->mpls_tc, a->wildcards, b->wildcards, OFPFW_MPLS_TC) &&
 		   nonstrict_mask64(a->metadata, b->metadata, a->metadata_mask, b->metadata_mask);
@@ -263,6 +277,12 @@ match_std_pkt(struct ofl_match_standard *a, struct ofl_match_standard *b) {
 		   pkt_mask32(a->nw_dst, b->nw_dst, a->nw_dst_mask) &&
 		   pkt_wild16(a->tp_src, b->tp_src, a->wildcards, OFPFW_TP_SRC) &&
 		   pkt_wild16(a->tp_dst, b->tp_dst, a->wildcards, OFPFW_TP_DST) &&
+		   //===============added RM protocol handler here//
+		    pkt_wild16(a->src_id, b->src_id, a->wildcards, b->wildcards, OFPFW_RM_SRC) &&
+		   pkt_wild16(a->dest_id, b->dest_id, a->wildcards, b->wildcards, OFPFW_RM_DST) &&
+		   pkt_wild16(a->tree_id, b->tree_id, a->wildcards, b->wildcards, OFPFW_RM_TREE) &&
+		   pkt_wild8(a->data_type, b->data_type, a->wildcards, b->wildcards, OFPFW_RM_DATA_TYPE) &&
+		    //===============added RM protocol handler here//
 		   pkt_wild32(a->mpls_label, b->mpls_label, a->wildcards, OFPFW_MPLS_LABEL) &&
 		   pkt_wild8 (a->mpls_tc, b->mpls_tc, a->wildcards, OFPFW_MPLS_TC) &&
 		   pkt_mask64(a->metadata, b->metadata, a->metadata_mask);

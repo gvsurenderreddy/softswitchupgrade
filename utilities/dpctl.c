@@ -1115,6 +1115,7 @@ parse_match(char *str, struct ofl_match_header **match) {
             }
             continue;
         }
+        //update this for RM
         if (strncmp(token, MATCH_TP_SRC KEY_VAL, strlen(MATCH_TP_SRC KEY_VAL)) == 0) {
             if (parse16(token + strlen(MATCH_TP_SRC KEY_VAL), NULL, 0, 0xffff, &(m->tp_src))) {
                 ofp_fatal(0, "Error parsing tp_src: %s.", token);
@@ -1127,6 +1128,37 @@ parse_match(char *str, struct ofl_match_header **match) {
             }
             continue;
         }
+        //===================================================================/
+        if (strncmp(token, MATCH_RM_SRC KEY_VAL, strlen(MATCH_RM_SRC  KEY_VAL)) == 0) {
+            if (parse16(token + strlen(MATCH_RM_SRC KEY_VAL), NULL, 0, 0xffff, &(m->src_id))) {
+                ofp_fatal(0, "Error parsing rm_src: %s.", token);
+            }
+            continue;
+        }
+        if (strncmp(token, MATCH_RM_DEST KEY_VAL, strlen(MATCH_RM_DEST KEY_VAL)) == 0) {
+            if (parse16(token + strlen(MATCH_RM_DEST KEY_VAL), NULL, 0, 0xffff, &(m->dest_id))) {
+                ofp_fatal(0, "Error parsing rm_dest: %s.", token);
+            }
+            continue;
+        }
+        if (strncmp(token, MATCH_RM_TREE KEY_VAL, strlen(MATCH_RM_TREE KEY_VAL)) == 0) {
+            if (parse16(token + strlen(MATCH_RM_TREE KEY_VAL), NULL, 0, 0xffff, &(m->tree_id))) {
+                ofp_fatal(0, "Error parsing rm_tree: %s.", token);
+            }
+            continue;
+        }
+        if (strncmp(token, MATCH_RM_DATA_TYPE KEY_VAL, strlen(MATCH_RM_DATA_TYPE KEY_VAL)) == 0) {
+            if (parse16(token + strlen(MATCH_RM_DATA_TYPE KEY_VAL), NULL, 0, 0xff, &(m->data_type))) {
+                ofp_fatal(0, "Error parsing rm_data_type: %s.", token);
+            }
+            continue;
+        }
+        
+        
+        
+        
+        
+        //====================================================================/
         if (strncmp(token, MATCH_MPLS_LABEL KEY_VAL, strlen(MATCH_MPLS_LABEL KEY_VAL)) == 0) {
             if (parse32(token + strlen(MATCH_MPLS_LABEL KEY_VAL), NULL, 0, 0xfffff, &(m->mpls_label))) {
                 ofp_fatal(0, "Error parsing mpls_label: %s.", token);

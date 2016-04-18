@@ -227,6 +227,20 @@ ofl_structs_match_print(FILE *stream, struct ofl_match_header *match, struct ofl
             if ((m->wildcards & OFPFW_TP_DST) == 0) {
                 fprintf(stream, ", tpdst=\"%u\"", m->tp_dst);
             }
+            //==================================Reverse Multicast Tree=============================================================//
+             if ((m->wildcards & OFPFW_RM_SRC) == 0) {
+                fprintf(stream, ", rmsrc=\"%u\"", m->src_id);
+            }
+            if ((m->wildcards & OFPFW_RM_DEST) == 0) {
+                fprintf(stream, ", rmdest=\"%u\"", m->dest_id);
+            }
+            if ((m->wildcards & OFPFW_RM_TREE) == 0) {
+                fprintf(stream, ", rmtree=\"%u\"", m->tree_id);
+            }
+            if ((m->wildcards & OFPFW_RM_DATA_TYPE) == 0) {
+                fprintf(stream, ", rmdatatype=\"%u\"", m->data_type);
+            }
+            //===============================================================================================//
             if ((m->wildcards & OFPFW_MPLS_LABEL) == 0) {
                 fprintf(stream, ", mplslbl=\"0x%05"PRIx32"\"", m->mpls_label);
             }

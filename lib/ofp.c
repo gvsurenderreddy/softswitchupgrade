@@ -796,7 +796,7 @@ actions_next(struct actions_iterator *iter)
         return NULL;
     }
 }
-
+//need to fix this
 void
 normalize_match(struct ofp_match *m)
 {
@@ -825,7 +825,7 @@ normalize_match(struct ofp_match *m)
         } else if (m->nw_proto == IPPROTO_TCP ||
                    m->nw_proto == IPPROTO_UDP ||
                    m->nw_proto == IPPROTO_ICMP ||
-                   ) {
+                   m->nw_proto == IPPROTO_RM) {
             if (wc & OFPFW_TP_SRC) {
                 m->tp_src = 0;
             }
@@ -889,7 +889,12 @@ ofp_match_to_literal_string(const struct ofp_match *match)
                      " nw_dst=%#10"PRIx32" "
                      " nw_dst_mask=%#10"PRIx32" "
                      " tp_src=%5"PRId16" "
-                     " tp_dst=%5"PRId16,
+                     " tp_dst=%5"PRId16
+                     " rm_tree=%5"PRId16" "
+                     " rm_src=%5"PRId16" "
+                     " rm_dest=%5"PRId16" "
+                     " tp_src=%5"PRId16" "
+                     ,
                      ntohl(match->wildcards),
                      ntohl(match->in_port),
                      ETH_ADDR_ARGS(match->dl_src),
